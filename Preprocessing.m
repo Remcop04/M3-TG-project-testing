@@ -39,12 +39,17 @@ ylabel('Accelaration (G)');
 d = designfilt('bandpassfir', 'FilterOrder', 20, 'CutoffFrequency1', 0.5, 'CutoffFrequency2', 150, 'SampleRate', fs); % Designing FIR bandpass filter from 0.5 till 150 Hz.
 Filtered_ECG_data = filtfilt(d, ecg_data);   % Filtering the data with the bandpass filter
 
-%% Determining the 
+%% Determining the Heart rate
 figure(2)
 findpeaks(Filtered_ECG_data, 'MinPeakHeight', 1*10^-5, 'MinPeakDistance', 500); % plotting findpeaks, Minimal Peak Height of 10*-5 Volt, and Minimal Peak distance of 333
 [pks,logs] = findpeaks(Filtered_ECG_data, 'MinPeakHeight', 1*10^-5, 'MinPeakDistance', 333); % finding height and locations of the peaks
 hr = 60./(diff(logs)./fs);                  % calculating heart rate from locations of the peaks
 filtered_hr = movmean(hr, [5 5]);           % Moving average over last 5 and next 5 heart rate peaks
+
+%% Interpolating heart rate vector
+t_hr = logs(1:end-1)./1000; 
+interp_hr = interp1(t_hr,filtered_hr,t);
+plot(t_hr, filtered_hr, 'o', t, interp_hr, ':.');
 %% Plotting filtered HR data
 figure(3);
 t_hr = logs(1:end-1)./1000;         % creating time axis for heart rate
@@ -71,10 +76,11 @@ xlabel('Time(s)');
 ylabel('BPM');
 
 
+
 %% save data
 final_data.t_gen = t;                       % General time axis for the ECG and accelerometer data
 final_data.t_hr = t_hr;                     % Time axis for the heart rate data.
 final_data.fs = fs;                         % Sample frequency of the ECG and accelerometer data
 final_data.acc = filtered_acc_vector;       % Filtered accelerometer vector data (Moving average of eucladian distance of acc_x, acc_y and acc_z)
-final_data.hr = filtered_hr;                % Filtered Heart rate data 
+final_data.hr = interp_hr;                  % Filtered Heart rate data 
 save('final_data.mat', 'final_data');       % saving data in new structure
