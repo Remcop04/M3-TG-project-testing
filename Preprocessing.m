@@ -77,4 +77,4 @@ final_data.t_hr = t_hr;                     % Time axis for the heart rate data.
 final_data.fs = fs;                         % Sample frequency of the ECG and accelerometer data
 final_data.acc = filtered_acc_vector;       % Filtered accelerometer vector data (Moving average of eucladian distance of acc_x, acc_y and acc_z)
 final_data.hr = filtered_hr;                % Filtered Heart rate data 
-save('final_data.mat', 'final_data');
+save('final_data.mat', 'final_data');       % saving data in new structure
