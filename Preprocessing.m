@@ -47,13 +47,12 @@ hr = 60./(diff(logs)./fs);                  % calculating heart rate from locati
 filtered_hr = movmean(hr, [5 5]);           % Moving average over last 5 and next 5 heart rate peaks
 
 %% Interpolating heart rate vector
-t_hr = logs(1:end-1)./1000; 
-interp_hr = interp1(t_hr,filtered_hr,t);
-plot(t_hr, filtered_hr, 'o', t, interp_hr, ':.');
+t_hr = logs(1:end-1)./1000;                         % time axis for heart rate to interpolate
+interp_hr = interp1(t_hr,filtered_hr,t);            % interpolating heart rate to sample freq of 1000 Hz
 %% Plotting filtered HR data
 figure(3);
 t_hr = logs(1:end-1)./1000;         % creating time axis for heart rate
-plot(t_hr,filtered_hr);             % plotting heart rate 
+plot(t,interp_hr);             % plotting heart rate 
 title('Heart Rate');
 xlabel('Time(s)');
 ylabel('Heart Rate (BPM)');
@@ -70,7 +69,7 @@ xlabel('Time(s)');
 ylabel('Accelaration (g)');
 
 subplot(2,1,2);
-plot(t_hr, filtered_hr);                % plotting Heart rate over time
+plot(t interp_hr);                % plotting Heart rate over time
 title('Heart ');
 xlabel('Time(s)');
 ylabel('BPM');
@@ -79,7 +78,6 @@ ylabel('BPM');
 
 %% save data
 final_data.t_gen = t;                       % General time axis for the ECG and accelerometer data
-final_data.t_hr = t_hr;                     % Time axis for the heart rate data.
 final_data.fs = fs;                         % Sample frequency of the ECG and accelerometer data
 final_data.acc = filtered_acc_vector;       % Filtered accelerometer vector data (Moving average of eucladian distance of acc_x, acc_y and acc_z)
 final_data.hr = interp_hr;                  % Filtered Heart rate data 
