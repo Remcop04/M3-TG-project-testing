@@ -1,3 +1,5 @@
+%% Optimal parameter determination based on RSE/MSE
+
 % Define parameter values to be tested
 A = -1:0.01:1; % Values to test for A
 D = -200:0.01:1000; % Values to test for D
@@ -37,7 +39,7 @@ D_optmse = D(col_mse);
 disp(['The optimal values for A and D based on the minimal MSE are ',num2str(A_optmse),' and ',num2str(D_optmse),', respectively.'])
 disp(['The model then becomes: y(t) = ',num2str(A_optmse),'*e^(',num2str(A_optmse),'t) + ',num2str(D_optmse),'*u(t).']);
 
-%% Plots
+%% Plots MSE
 figure(1);
 plot(A, mse(:,col_mse));
 title('MSE for different parameter values of A, at the optimal value for D');
@@ -49,3 +51,34 @@ plot(D, mse(row_mse,:));
 title('MSE for different parameter values of D, at the optimal value for A');
 xlabel('D')
 ylabel('MSE')
+
+%% Optimal parameter determination by visual inspection
+
+% Define parameter values to be tested
+A = -1:0.25:1; % Values to test for A
+D = -20:10:20; % Values to test for D
+vel_train = [1 2 3 4]; % Training values for velocity resulting from experiment
+hr_train = [100 120 140 160]; % Training values for HR resulting from experiment
+hr_init = 80; % Initial HR value; resting HR
+t = 2; % Time after initiating effort
+
+figure(3);
+hold on;
+leg = [];
+for i = 1:length(A) % Double for loop that calculates predicted HR value for the training velocities
+    for j = 1:length(D)
+
+        hr = hr_init*exp(A(i)*t) + D(j).*vel_train; % Calculate predicted HR
+
+        plot(vel_train, hr);
+
+        leg(i,j) = ['A = ',num2str(A(i)),', B = ' num2str(D(j)), '  '];
+
+    end 
+end
+
+plot(vel_train, hr_train);
+title('Plots of predicted HR and actual HR at different velocities at different values of A');
+xlabel('Velocity (m/s)');
+ylabel('HR (bpm)');
+legend(leg);
