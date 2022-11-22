@@ -6,8 +6,8 @@ data = load('final_data.mat');
 %% Optimal parameter determination based on RSE/MSE
 
 % Define parameter values to be tested
-A = -1:0.01:1; % Values to test for A
-D = -50:0.01:50; % Values to test for D
+A = 0.002:0.00001:0.01; % Values to test for A
+D = 20:0.01:40; % Values to test for D
 vel_train = data.final_data.acc; % Training values for velocity resulting from experiment
 hr_train = data.final_data.hr'; % Training values for HR resulting from experiment
 t = data.final_data.t_gen';
@@ -23,35 +23,19 @@ t = t(1:(end_index-start_index+1));
 %% Double for loop that calculates the RSE for different combinations of
 % Parameters
 hr_init = hr_train(1); % Initial HR value; resting HR
-% hr = [];
-% residuals = [];
-% rse = [];
 
-disp("");
-disp("Started estimation of parameters..");
+f = waitbar(0, "Started estimation of parameters..");
 
 for i=1:length(A) % Run over values of A
     for j=1:length(D) % Run over values of D
-        
         hr_predict = hr_init.*exp(A(i).*t) + D(j).*vel_train; % Predict heart rate with model
-        
-        %residuals = hr_train-hr; % Compare predicted HR and actual HR
-        %rss = sum(residuals.^2); % Calculate residual sum of squares
-        
-        %rse(i,j) = sqrt(rss/(length(vel_train)-2)); % Calculate residual standard error for this set of parameters
-        %mse(i,j) = rss/length(vel_train); % Calculate mean squared error for this set of parameters
-
         mse(i,j) = immse(hr_predict, hr_train);
     end
-
-    if i == length(A)/2
-        disp(50)
-    end
+    
+    waitbar(i/length(A), f, sprintf('Progress: %d %%', floor(i/length(A)*100)));
+    
 end
 
-%[row_rse, col_rse] = find(rse == min(rse(:))); % Find minimum value for RSE and corresponding values for A and D
-%A_optrse = A(row_rse);
-%D_optrse = D(col_rse);
 [row_mse, col_mse] = find(mse == min(mse(:))); % Find minimum value for MSE and corresponding values for A and D
 A_optmse = A(row_mse);
 D_optmse = D(col_mse);
@@ -79,6 +63,11 @@ plot(t,hr_predict, "blue")
 hold on
 plot(t,hr_train, "red")
 legend("HR prediction","HR truth")
+
+disp("Current best results:")
+disp("The optimal values for A and D based on the minimal MSE are 0.00521 and 31.37, respectively.")
+disp("The model then becomes: y(t) = 76.5259*e^(0.00521t) + 31.37*u(t).")
+
 
 %% Optimal parameter determination by visual inspection
 
