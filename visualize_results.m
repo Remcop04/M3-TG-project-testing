@@ -45,3 +45,24 @@ plot(t, hr_init.*exp(optmse_A.*t) + optmse_D.*vel_train)
 hold on
 plot(t,hr_train)
 legend("HR prediction","HR truth")
+
+%% Test on new segment
+vel_train = data.final_data.acc; % Training values for velocity resulting from experiment
+hr_train = data.final_data.hr'; % Training values for HR resulting from experiment
+t = data.final_data.t_gen';
+
+% Select jogging measurement
+start_index = 370595;
+end_index = 527862;
+
+hr_train = hr_train(start_index:end_index);
+vel_train = vel_train(start_index:end_index);
+t = t(1:(end_index-start_index+1));
+hr_init = hr_train(1);
+
+%% Plot predicted HR
+figure(4);
+plot(t, hr_init.*exp(optmse_A.*t) + optmse_D.*vel_train)
+hold on
+plot(t,hr_train)
+legend("HR prediction","HR truth")
