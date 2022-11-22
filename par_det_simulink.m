@@ -20,32 +20,40 @@ hr_train = downsample(hr_train, 10);
 vel_train = downsample(vel_train, 10);
 t = downsample(t, 10);
 
-%% Load Simulink model
-model = 
 
 %% Optimal parameter determination using simulink
 
 % Define parameter values to be tested
-A = -100:10:100; % Values to test for A
-B = -100:10:100; % Values to test for B
-C = -100:10:100; % Values to test for C
-D = -100:10:100; % Values to test for D
+A = -100:50:100; % Values to test for A
+B = -100:50:100; % Values to test for B
+C = -100:50:100; % Values to test for C
+D = -100:50:100; % Values to test for D
 
 
 % Double for loop that calculates the RSE for different combinations of
 % parameters
+f = waitbar(0, "Started estimation of parameters..");
 
 for i=1:length(A) % Run over values of A
     for j=1:length(B) % Run over values of B
         for k=1:length(C) % Run over values of C
             for l=1:length(D) % Run over values of D
         
-                hr_predict = hr_init*exp(A(i)*t) + D(j).*vel_train; % Predict heart rate with simulink model
+                u = [t,vel_train];
+                A_value = A(i);
+                B_value = B(j);
+                C_value = C(k);
+                D_value = D(l);
+                
+                simOut = sim('SSmodel.slx', 'StopTime', num2str(t(end)), 'FixedStep', num2str(1/100)); % Predict heart rate with simulink model
+                hr_predict = simOut.hr_simulink.signals.values(1:length(vel_train));
                 mse(i,j,k,l) = immse(hr_predict, hr_train);
-                                    
+
             end
         end
+        waitbar(i/length(A), f, sprintf('Progress: %d %%', floor(i/length(A)*100)));
     end
+
 end
 
 [A_index, B_index, C_index, D_index] = find(mse == min(mse(:))); % Find minimum value for MSE and corresponding values for A, B, C and D
@@ -121,8 +129,16 @@ vel_train = downsample(vel_train, 10);
 t = downsample(t, 10);
 
 %% Plot predicted HR
+A_value = A_optmse;
+B_value = B_optmse;
+C_value = C_optmse;
+D_value = D_optmse;
+
 figure(4);
-plot(t, hr_init.*exp(optmse_A.*t) + optmse_D.*vel_train)
+simOut = sim('SSmodel.slx', 'StopTime', num2str(t(end)), 'FixedStep', num2str(1/100)); % Predict heart rate with simulink model
+hr_predict = simOut.hr_simulink.signals.values(1:length(vel_train));
+
+plot(t, hr_predict)
 hold on
 plot(t,hr_train)
 legend("HR prediction","HR truth")
