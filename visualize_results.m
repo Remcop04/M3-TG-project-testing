@@ -16,6 +16,11 @@ vel_train = vel_train(start_index:end_index);
 t = t(1:(end_index-start_index+1));
 hr_init = hr_train(1);
 
+%% Downsample data from 1000 Hz to 100 Hz
+hr_train = downsample(hr_train, 10);
+vel_train = downsample(vel_train, 10);
+t = downsample(t, 10);
+
 %% Load best results
 bestresults = load('bestresults.mat');
 optmse_A = bestresults.bestresults.optimalA;
@@ -59,6 +64,11 @@ hr_train = hr_train(start_index:end_index);
 vel_train = vel_train(start_index:end_index);
 t = t(1:(end_index-start_index+1));
 hr_init = hr_train(1);
+
+%% Downsample data from 1000 Hz to 100 Hz
+hr_train = downsample(hr_train, 10);
+vel_train = downsample(vel_train, 10);
+t = downsample(t, 10);
 
 %% Plot predicted HR
 figure(4);
