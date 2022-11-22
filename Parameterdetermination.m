@@ -68,6 +68,13 @@ disp("Current best results:")
 disp("The optimal values for A and D based on the minimal MSE are 0.00521 and 31.37, respectively.")
 disp("The model then becomes: y(t) = 76.5259*e^(0.00521t) + 31.37*u(t).")
 
+%% Save results
+bestresults.A = A
+bestresults.D = D
+bestresults.optimalA = A_optmse
+bestresults.optimalD = D_optmse
+bestresults.mse = mse
+save bestresults.mat bestresults
 
 %% Optimal parameter determination by visual inspection
 
