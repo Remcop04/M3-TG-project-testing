@@ -1,3 +1,5 @@
+clear all, close all
+
 %% Load data
 data = importdata('converted_data_test1.txt'); % loading the converted data from txt file from OpenSignals
 
@@ -91,4 +93,4 @@ final_data.t_gen = t;                       % General time axis for the ECG and 
 final_data.fs = fs;                         % Sample frequency of the ECG and accelerometer data
 final_data.acc = filtered_acc_vector;       % Filtered accelerometer vector data (Moving average of eucladian distance of acc_x, acc_y and acc_z)
 final_data.hr = interp_hr;                  % Filtered Heart rate data 
-save('final_data.mat', 'final_data');       % saving data in new structure
+save('preprocessed_data.mat', 'final_data');       % saving data in new structure
