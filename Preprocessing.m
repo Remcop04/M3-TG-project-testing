@@ -1,3 +1,10 @@
+% November 2022
+% Made by: 
+% Remco Poelarends - s2377187 - r.j.poelarends@student.utwente.nl
+% Niels Bergwerff - s2310465 - n.j.bergwerff@student.utwente.nl
+% Nathan van Dieren - s2306158 - b.j.vandieren@student.utwente.nl
+
+
 %% ECG meting inladen
 data = importdata('C:\Users\natha\OneDrive\Documenten\Universiteit\Master\TA\M3-TG-project-testing\converted_data_test1.txt'); % loading the converted data from txt file from OpenSignals
 
@@ -57,7 +64,7 @@ title('Heart Rate');
 xlabel('Time(s)');
 ylabel('Heart Rate (BPM)');
 
-%% eucladian distance
+%% Calculating eucladian distance
 acc_vector = sqrt(acc_x.^2 + acc_y.^2 + acc_z.^2);          % calculating Eucladian distance of the acceleration vector
 filtered_acc_vector = movmean(acc_vector, [2000 2000]);     % Moving average over last 2 seconds and next 2 seconds of accelaration signal.
 
@@ -76,7 +83,7 @@ ylabel('BPM');
 
 
 
-%% save data
+%% Save data
 final_data.t_gen = t;                       % General time axis for the ECG and accelerometer data
 final_data.fs = fs;                         % Sample frequency of the ECG and accelerometer data
 final_data.acc = filtered_acc_vector;       % Filtered accelerometer vector data (Moving average of eucladian distance of acc_x, acc_y and acc_z)
