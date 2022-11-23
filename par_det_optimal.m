@@ -20,8 +20,8 @@ t = t(1:(end_index-start_index+1));
 %% Double for loop that calculates the RSE for different combinations of
 % Parameters
 hr_init = hr_train(1); % Initial HR value; resting HR
-A = 0.001:0.00001:0.01; % Values to test for A
-D = 15:0.01:40; % Values to test for D
+A = 0.001:0.0001:0.008; % Values to test for A
+D = 10:0.001:40; % Values to test for D
 
 f = waitbar(0, "Started estimation of parameters..");
 
@@ -61,7 +61,10 @@ figure(3)
 plot(t,hr_predict, "blue")
 hold on
 plot(t,hr_train, "red")
+xlabel('Time(s)', 'FontSize', 10);
+ylabel('Heart Rate (BPM)', 'FontSize', 10);
 legend("HR prediction","HR truth")
+title("Results model on Jogging measurement", 'FontSize', 15)
 
 disp("Current best results:")
 disp("The optimal values for A and D based on the minimal MSE are 0.00521 and 31.37, respectively.")
@@ -95,3 +98,6 @@ plot(t, hr_init.*exp(A_optmse.*t) + D_optmse.*vel_train)
 hold on
 plot(t,hr_train)
 legend("HR prediction","HR truth")
+xlabel('Time(s)', 'FontSize', 10);
+ylabel('Heart Rate (BPM)', 'FontSize', 10);
+title("Validating model on Running measurement", 'FontSize', 15)
