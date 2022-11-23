@@ -1,7 +1,7 @@
 clear all, close all
 
 %% Load data
-data = load('final_data.mat');
+data = load('preprocessed_data.mat');
 
 %% Optimal parameter determination based on RSE/MSE
 
@@ -10,23 +10,18 @@ hr_train = data.final_data.hr'; % Training values for HR resulting from experime
 t = data.final_data.t_gen';
 
 %% Select jogging measurement
-start_index = 176765;
-end_index = 268850;
+start_index = 17918;
+end_index = 26764;
 
 hr_train = hr_train(start_index:end_index);
 vel_train = vel_train(start_index:end_index);
 t = t(1:(end_index-start_index+1));
 
-%% Downsample data from 1000 Hz to 100 Hz
-hr_train = downsample(hr_train, 10);
-vel_train = downsample(vel_train, 10);
-t = downsample(t, 10);
-
 %% Double for loop that calculates the RSE for different combinations of
 % Parameters
 hr_init = hr_train(1); % Initial HR value; resting HR
-A = 0.002:0.00001:0.01; % Values to test for A
-D = 20:0.01:40; % Values to test for D
+A = 0.001:0.00001:0.01; % Values to test for A
+D = 15:0.01:40; % Values to test for D
 
 f = waitbar(0, "Started estimation of parameters..");
 
@@ -85,23 +80,18 @@ vel_train = data.final_data.acc; % Training values for velocity resulting from e
 hr_train = data.final_data.hr'; % Training values for HR resulting from experiment
 t = data.final_data.t_gen';
 
-% Select jogging measurement
-start_index = 370595;
-end_index = 527862;
+% Select running measurement
+start_index = 37288;
+end_index = 49204;
 
 hr_train = hr_train(start_index:end_index);
 vel_train = vel_train(start_index:end_index);
 t = t(1:(end_index-start_index+1));
 hr_init = hr_train(1);
 
-%% Downsample data from 1000 Hz to 100 Hz
-hr_train = downsample(hr_train, 10);
-vel_train = downsample(vel_train, 10);
-t = downsample(t, 10);
-
 %% Plot predicted HR
 figure(4);
-plot(t, hr_init.*exp(optmse_A.*t) + optmse_D.*vel_train)
+plot(t, hr_init.*exp(A_optmse.*t) + D_optmse.*vel_train)
 hold on
 plot(t,hr_train)
 legend("HR prediction","HR truth")
