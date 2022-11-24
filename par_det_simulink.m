@@ -15,7 +15,6 @@ hr_train = hr_train(start_index:end_index);
 vel_train = vel_train(start_index:end_index);
 t = t(1:(end_index-start_index+1));
 
-
 %% Optimal parameter determination using simulink
 
 % Define parameter values to be tested
