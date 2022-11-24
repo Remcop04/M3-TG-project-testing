@@ -19,10 +19,10 @@ t = t(1:(end_index-start_index+1));
 %% Optimal parameter determination using simulink
 
 % Define parameter values to be tested
-A = -100:50:100; % Values to test for A
-B = -100:50:100; % Values to test for B
-C = -100:50:100; % Values to test for C
-D = -100:50:100; % Values to test for D
+A = 0:1:10; % Values to test for A
+B = 0:10:100; % Values to test for B
+C = 0:10:100; % Values to test for C
+D = 0:10:100; % Values to test for D
 
 
 % Double for loop that calculates the RSE for different combinations of
@@ -30,6 +30,7 @@ D = -100:50:100; % Values to test for D
 f = waitbar(0, "Started estimation of parameters..");
 
 for i=1:length(A) % Run over values of A
+    disp(A(i));
     for j=1:length(B) % Run over values of B
         for k=1:length(C) % Run over values of C
             for l=1:length(D) % Run over values of D

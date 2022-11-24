@@ -17,6 +17,11 @@ hr_train = hr_train(start_index:end_index);
 vel_train = vel_train(start_index:end_index);
 t = t(1:(end_index-start_index+1));
 
+%% Select sample point
+hr_train = [100.50 143 169 174];
+vel_train = [0.487 0.99 1.248 1.60];
+t_anders = [105 185.4 297.7 379.8];
+t = [105 80.5 112.3 82.5];
 
 %% Double for loop that calculates the RSE for different combinations of
 % Parameters
