@@ -71,39 +71,3 @@ xlabel('Time(s)', 'FontSize', 10);
 ylabel('Heart Rate (BPM)', 'FontSize', 10);
 legend("HR prediction","HR truth")
 title("Results model on Jogging measurement", 'FontSize', 15)
-
-disp("Current best results:")
-disp("The optimal values for A and D based on the minimal MSE are 0.00521 and 31.37, respectively.")
-disp("The model then becomes: y(t) = 76.5259*e^(0.00521t) + 31.37*u(t).")
-
-%% Save results
-bestresults.A = A
-bestresults.D = D
-bestresults.optimalA = A_optmse
-bestresults.optimalD = D_optmse
-bestresults.mse = mse
-save bestresults.mat bestresults
-
-%% Test on new segment
-vel_train = data.final_data.acc; % Training values for velocity resulting from experiment
-hr_train = data.final_data.hr'; % Training values for HR resulting from experiment
-t = data.final_data.t_gen';
-
-% Select running measurement
-start_index = 37288;
-end_index = 49204;
-
-hr_train = hr_train(start_index:end_index);
-vel_train = vel_train(start_index:end_index);
-t = t(1:(end_index-start_index+1));
-hr_init = hr_train(1);
-
-%% Plot predicted HR
-figure(4);
-plot(t, hr_init.*exp(A_optmse.*t) + D_optmse.*vel_train)
-hold on
-plot(t,hr_train)
-legend("HR prediction","HR truth")
-xlabel('Time(s)', 'FontSize', 10);
-ylabel('Heart Rate (BPM)', 'FontSize', 10);
-title("Validating model on Running measurement", 'FontSize', 15)

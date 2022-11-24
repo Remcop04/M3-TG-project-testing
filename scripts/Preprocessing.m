@@ -1,13 +1,4 @@
-
-% November 2022
-% Made by: 
-% Remco Poelarends - s2377187 - r.j.poelarends@student.utwente.nl
-% Niels Bergwerff - s2310465 - n.j.bergwerff@student.utwente.nl
-% Nathan van Dieren - s2306158 - b.j.vandieren@student.utwente.nl
-
-
-%% ECG meting inladen
-data = importdata('C:\Users\natha\OneDrive\Documenten\Universiteit\Master\TA\M3-TG-project-testing\converted_data_test1.txt'); % loading the converted data from txt file from OpenSignals
+clear all, clc
 
 %% Load data
 data = importdata('converted_data_test1.txt'); % loading the converted data from txt file from OpenSignals

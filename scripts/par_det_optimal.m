@@ -67,10 +67,6 @@ ylabel('Heart Rate (BPM)', 'FontSize', 10);
 legend("HR prediction","HR truth")
 title("Results model on Jogging measurement", 'FontSize', 15)
 
-disp("Current best results:")
-disp("The optimal values for A and D based on the minimal MSE are 0.00521 and 31.37, respectively.")
-disp("The model then becomes: y(t) = 76.5259*e^(0.00521t) + 31.37*u(t).")
-
 %% Save results
 bestresults.A = A
 bestresults.D = D
